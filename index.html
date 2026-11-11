@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bike Lock Pricing Landscape</title>
-<meta name="description" content="Bike lock pricing: competitors vs. Master Lock. Prepared by NOBE Illinois for Fortune Brands Innovations.">
+<meta name="description" content="Master Lock bike lock research: pricing vs. competitors, student survey and preliminary PPA. Prepared by NOBE Illinois for Fortune Brands Innovations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Source+Serif+4:wght@400;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -27,6 +27,7 @@
   --color-bad: #F0786A; --cds-chart-grid: #263041; --cds-chart-axis: #475468; --cds-chart-reference: #8792A6;
   --cds-surface-popover: #1E2733; --cds-border: #334052; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.4); --cds-text-secondary: #A3AEBF; color-scheme: dark; } }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 15px; }
 .site { max-width: 1240px; margin-inline: auto; padding-block: 32px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .site-foot { margin-top: 32px; font-size: 12px; color: var(--color-fg-muted); text-align: center; }
@@ -34,575 +35,48 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .dash-skeleton:empty::after, strong.dash-skeleton::after { content: ""; position: absolute; inset: 20% 0; border-radius: 6px; background: var(--color-border-line); opacity: .5; }
 strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch; }
 </style>
+<style>
+.nb-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--color-border-line); flex-wrap: wrap; }
+.nb-tab { font: inherit; font-size: var(--cds-font-size-body); font-weight: 600; background: none; border: 0; border-bottom: 3px solid transparent;
+  color: var(--color-fg-muted); padding: 10px 14px; margin-bottom: -1px; cursor: pointer; }
+.nb-tab[aria-selected="true"] { color: var(--nb-navy); border-bottom-color: var(--nb-orange); }
+.nb-tab:focus-visible { outline: 2px solid var(--nb-orange); outline-offset: 2px; }
+.nb-panel { display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+.nb-chart.short { min-height: 200px; }
+.nb-purpose { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--cds-gap-md); }
+.nb-purpose > div { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+.nb-purpose h3 { margin: 0 0 6px; font-size: var(--cds-font-size-heading); color: var(--nb-navy); }
+.nb-purpose p { margin: 0 0 8px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.5; }
+.nb-purpose p.f { color: var(--color-fg); font-size: 0.875rem; }
+.nb-ins-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
+.nb-ins { background: var(--color-panel); border: 1px solid var(--color-border-line); border-left: 4px solid var(--nb-orange); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+.nb-ins h3 { margin: 0 0 12px; font-size: 1rem; line-height: 1.4; color: var(--nb-navy); display: flex; gap: 10px; }
+.nb-ins h3 span { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--nb-navy); color: var(--color-panel); font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
+.nb-ins dl { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.nb-ins dt { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--nb-orange); font-weight: 700; }
+.nb-ins dd { margin: 2px 0 0; font-size: 0.875rem; line-height: 1.5; color: var(--color-fg); }
+.nb-tablewrap { overflow-x: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.nb-svtable { width: 100%; border-collapse: collapse; font-size: 0.875rem; line-height: 1.5; min-width: 640px; }
+.nb-svtable th, .nb-svtable td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--color-border-line); }
+.nb-svtable thead th { background: var(--nb-navy); color: var(--color-panel); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.nb-svtable tbody tr:last-child th, .nb-svtable tbody tr:last-child td { border-bottom: 0; }
+.nb-svtable tbody th { width: 30%; font-weight: 400; }
+.nb-svtable tbody th strong { display: block; color: var(--nb-navy); margin-bottom: 4px; }
+.nb-svtable tbody th span { color: var(--color-fg-muted); font-size: 0.8125rem; }
+.nb-svtable td:last-child { width: 26%; color: var(--nb-navy); font-weight: 600; }
+.nb-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: 4px; }
+.nb-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.nb {
+  --lt-cable: #13294B; --lt-ulock: #E8822F; --lt-ucable: #F5B47F; --lt-chain: #2A8C8C; --lt-folding: #8E5B8C; --lt-tie: #9AA5B8; }
+@media (prefers-color-scheme: dark) { .nb { --lt-cable: #7FA8E8; --lt-ulock: #F5A05C; --lt-ucable: #F8C99E; --lt-chain: #5CC3BE; --lt-folding: #C99AC6; --lt-tie: #8792A6; } }
+.nb-pies { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: var(--cds-gap-md); }
+</style>
 </head>
 <body>
 <main class="site">
 <script>
-/* Small stand-in for the dashboard runtime so the page runs on its own. */
 (() => {
-  const RAW = { competitor_prices: [
- {
-  "brand": "Schlage",
-  "product": "11 in. U-Lock (999232)",
-  "lock_type": "U-Lock",
-  "retailer": "Home Depot",
-  "price": 25.32,
-  "security": "Medium-High"
- },
- {
-  "brand": "Schlage",
-  "product": "Bike Lock Cable with Key, 5 ft (999218)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "Home Depot",
-  "price": 25.73,
-  "security": "Medium-Low"
- },
- {
-  "brand": "Schlage",
-  "product": "Bike Lock Cable with Key, 5 ft (999218)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "Ace Hardware",
-  "price": 21.99,
-  "security": "Medium-Low"
- },
- {
-  "brand": "Schlage",
-  "product": "4 ft Double Loop Cable + Padlock (994800)",
-  "lock_type": "Cable + Padlock",
-  "retailer": "Home Depot",
-  "price": 16.81,
-  "security": "Low"
- },
- {
-  "brand": "Schlage",
-  "product": "15 ft Looped Steel Cable (999263)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "Walmart",
-  "price": 27.88,
-  "security": "Low"
- },
- {
-  "brand": "Schlage",
-  "product": "15 ft Looped Steel Cable (999263)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "Ace Hardware",
-  "price": 23.99,
-  "security": "Low"
- },
- {
-  "brand": "Schlage",
-  "product": "7 ft Flexible Steel Cable (820406)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "Walmart",
-  "price": 33.64,
-  "security": "Low"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Grizzly U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Lowe's",
-  "price": 49.99,
-  "security": "High"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Grizzly U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Home Depot",
-  "price": 49.99,
-  "security": "High"
- },
- {
-  "brand": "DoubleLock",
-  "product": "BOBCAT 8 Cable Combo",
-  "lock_type": "Cable Lock",
-  "retailer": "Lowe's",
-  "price": 28.19,
-  "security": "Medium-High"
- },
- {
-  "brand": "DoubleLock",
-  "product": "BOBCAT 8 Cable Combo",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 28.19,
-  "security": "Medium-High"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Badger Strap Locks (2x)",
-  "lock_type": "Tie Lock",
-  "retailer": "Lowe's",
-  "price": 22.99,
-  "security": "Low"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Badger Strap Locks (2x)",
-  "lock_type": "Tie Lock",
-  "retailer": "Home Depot",
-  "price": 22.99,
-  "security": "Low"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Panther Cable Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Lowe's",
-  "price": 19.99,
-  "security": "Medium"
- },
- {
-  "brand": "DoubleLock",
-  "product": "Panther Cable Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 19.99,
-  "security": "Medium"
- },
- {
-  "brand": "Brinks",
-  "product": "Mini U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Home Depot",
-  "price": 18.41,
-  "security": "Medium-High"
- },
- {
-  "brand": "Brinks",
-  "product": "5/16 in. Flexible Steel Keyed Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 11.09,
-  "security": "Medium-Low"
- },
- {
-  "brand": "Brinks",
-  "product": "5/16 in Flexible Steel Combination Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 14.58,
-  "security": "Medium-Low"
- },
- {
-  "brand": "Brinks",
-  "product": "3/8 in Outdoor Adjustable Cable",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 22.73,
-  "security": "Medium"
- },
- {
-  "brand": "Brinks",
-  "product": "5/16 in Flexible Steel Combination Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 7.74,
-  "security": "Low"
- },
- {
-  "brand": "Brinks",
-  "product": "3/8 in Covered Steel",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 16.97,
-  "security": "Medium-Low"
- },
- {
-  "brand": "Brinks",
-  "product": "5/8in Flexible Steel Keyed Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 29.97,
-  "security": "Medium-High"
- },
- {
-  "brand": "Brinks",
-  "product": "Brinks Flex Weave 3/8in",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 27.44,
-  "security": "Medium-High"
- },
- {
-  "brand": "Brinks",
-  "product": "Covered Steel 3/8 Keyed",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 35,
-  "security": "Medium"
- },
- {
-  "brand": "Bell",
-  "product": "Sports Hands Off U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Walmart",
-  "price": 29.02,
-  "security": "Medium-High"
- },
- {
-  "brand": "Bell",
-  "product": "Bell Catalyst 300 U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Farm & Fleet",
-  "price": 21.99,
-  "security": "Medium-High"
- },
- {
-  "brand": "Bell",
-  "product": "Bell Catalyst 300 U-Lock",
-  "lock_type": "U-Lock",
-  "retailer": "Academy Sports",
-  "price": 24.99,
-  "security": "Medium-High"
- },
- {
-  "brand": "Bell",
-  "product": "Ballistic 410 Cable Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 12.99,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Ballistic 610 Keyed Cable Lock",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 19,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Combination Cable Lock Watchdog 99",
-  "lock_type": "Cable Lock",
-  "retailer": "Farm & Fleet",
-  "price": 12.99,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Combination Cable Lock Watchdog 100",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 21.29,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Bell Pitcrew 600 Bike Cable Set",
-  "lock_type": "Cable Lock",
-  "retailer": "Farm & Fleet",
-  "price": 13.99,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Bell Sports Rampage 400 Steel Bike Lock",
-  "lock_type": "Chain Lock",
-  "retailer": "Walmart",
-  "price": 31.63,
-  "security": "Low"
- },
- {
-  "brand": "Bell",
-  "product": "Bell Catalyst 600 Folding Lock",
-  "lock_type": "Folding Lock",
-  "retailer": "Academy Sports",
-  "price": 31.99,
-  "security": "Medium-High"
- },
- {
-  "brand": "Bell",
-  "product": "QuickZip Combo Lock Bundle",
-  "lock_type": "Zip Tie",
-  "retailer": "Target",
-  "price": 19.99,
-  "security": "Low"
- },
- {
-  "brand": "OnGuard",
-  "product": "Bulldog Combo STD DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Home Depot",
-  "price": 52.95,
-  "security": "Medium"
- },
- {
-  "brand": "OnGuard",
-  "product": "Bulldog Combo STD DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Walmart",
-  "price": 64,
-  "security": "Medium"
- },
- {
-  "brand": "OnGuard",
-  "product": "Bulldog Mini DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Home Depot",
-  "price": 54,
-  "security": "Medium"
- },
- {
-  "brand": "OnGuard",
-  "product": "Bulldog Mini DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Walmart",
-  "price": 59.95,
-  "security": "Medium"
- },
- {
-  "brand": "OnGuard",
-  "product": "Pitbull STD DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Home Depot",
-  "price": 69.49,
-  "security": "High"
- },
- {
-  "brand": "OnGuard",
-  "product": "Pitbull STD DT",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Walmart",
-  "price": 79.95,
-  "security": "High"
- },
- {
-  "brand": "OnGuard",
-  "product": "Brute",
-  "lock_type": "U-Lock",
-  "retailer": "Walmart",
-  "price": 91,
-  "security": "Very High"
- },
- {
-  "brand": "OnGuard",
-  "product": "Beast Chain with X2 Padlock",
-  "lock_type": "Chain Lock + Padlock",
-  "retailer": "Home Depot",
-  "price": 129.99,
-  "security": "Very High"
- },
- {
-  "brand": "OnGuard",
-  "product": "Beast Chain with X2 Padlock",
-  "lock_type": "Chain Lock + Padlock",
-  "retailer": "Lowe's",
-  "price": 129.99,
-  "security": "Very High"
- },
- {
-  "brand": "OnGuard",
-  "product": "Doberman Coil Combo Cable",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 41,
-  "security": "Low"
- },
- {
-  "brand": "OnGuard",
-  "product": "Doberman Coil Combo Cable",
-  "lock_type": "Cable Lock",
-  "retailer": "Walmart",
-  "price": 37.99,
-  "security": "Low"
- }
-], masterlock_prices: [
- {
-  "brand": "Master Lock",
-  "product": "Combination braided steel cable lock, 6 ft x 5/16 in (8114D)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 18.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Python adjustable cable lock, 6 ft x 3/16 in (8417D)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 14.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Python adjustable cable lock, 6 ft x 3/8 in (8413DPF)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 30.32,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Preset combination cable lock, 4 ft x 5/16 in (8143D)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 9.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Hardened steel U-lock, 8 in shackle (8170D)",
-  "lock_type": "U-Lock",
-  "retailer": "masterlock.com",
-  "price": 20.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Python adjustable cable lock, 6 ft x 5/16 in (8418D)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 25.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Combination braided steel cable lock, 6 ft x 1/2 in (8122D)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 19.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Combination braided steel cable lock, 5 ft x 1/4 in (8152DASTWD)",
-  "lock_type": "Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 9.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Hardened steel chain with mini U-lock, 3 ft x 10 mm (8234EC)",
-  "lock_type": "Chain Lock",
-  "retailer": "masterlock.com",
-  "price": 43.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Looped end braided steel cable, 6 ft x 3/8 in (78DPF)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "masterlock.com",
-  "price": 15.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty folding lock, combination (8336EC)",
-  "lock_type": "Folding Lock",
-  "retailer": "masterlock.com",
-  "price": 46.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Looped end braided steel cable, 4 ft x 3/8 in (85DPF)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "masterlock.com",
-  "price": 17.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Braided steel cable with laminated padlock, 3 ft (719D)",
-  "lock_type": "Cable + Padlock",
-  "retailer": "masterlock.com",
-  "price": 20.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty U-lock with cable, 11 in shackle (8285EC)",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "masterlock.com",
-  "price": 66.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty keyed braided steel cable, 6 ft x 5/8 in (8155DCC)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 47.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Looped end braided steel cable, 6 ft x 1/4 in (65D)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "masterlock.com",
-  "price": 16.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Keyed vinyl-coated braided steel cable, 5 ft x 5/16 in (8109D)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 19.47,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty U-lock, 8-1/4 in shackle (8195EC)",
-  "lock_type": "U-Lock",
-  "retailer": "masterlock.com",
-  "price": 38.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Keyed braided steel cable lock, 6 ft x 5/16 in (8126D)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "masterlock.com",
-  "price": 21.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty folding lock, 2-3/4 ft (8335EC)",
-  "lock_type": "Folding Lock",
-  "retailer": "masterlock.com",
-  "price": 36.99,
-  "checked": "2026-11-01"
- },
- {
-  "brand": "Master Lock",
-  "product": "15 ft looped steel cable (72DCC)",
-  "lock_type": "Looped Security Cable",
-  "retailer": "Home Depot",
-  "price": 34.47,
-  "checked": "2026-10-25"
- },
- {
-  "brand": "Master Lock",
-  "product": "Heavy duty keyed braided steel cable, 6 ft x 5/8 in (8155DCC)",
-  "lock_type": "Keyed Cable Lock",
-  "retailer": "Home Depot",
-  "price": 49.97,
-  "checked": "2026-10-25"
- },
- {
-  "brand": "Master Lock",
-  "product": "Combination cable lock, 4 ft (8143DHCHD)",
-  "lock_type": "Cable Lock",
-  "retailer": "Home Depot",
-  "price": 12.97,
-  "checked": "2026-10-25"
- },
- {
-  "brand": "Master Lock",
-  "product": "7.25 in. U-lock with cable",
-  "lock_type": "U-Lock + Cable",
-  "retailer": "Target",
-  "price": 17.49,
-  "checked": "2026-10-25"
- }
-] };
+  const RAW = {"s_trust_pair": [{"pair": "Portability + Security", "count": 70, "avg": 4.01}, {"pair": "Durability + Security", "count": 53, "avg": 3.92}, {"pair": "Durability + Portability", "count": 7, "avg": 3.71}, {"pair": "Security + Weight", "count": 6, "avg": 3.83}, {"pair": "Other pairs", "count": 4, "avg": 3.25}], "competitor_prices": [{"brand": "Schlage", "product": "11 in. U-Lock (999232)", "lock_type": "U-Lock", "retailer": "Home Depot", "price": 25.32, "security": "Medium-High"}, {"brand": "Schlage", "product": "Bike Lock Cable with Key, 5 ft (999218)", "lock_type": "Keyed Cable Lock", "retailer": "Home Depot", "price": 25.73, "security": "Medium-Low"}, {"brand": "Schlage", "product": "Bike Lock Cable with Key, 5 ft (999218)", "lock_type": "Keyed Cable Lock", "retailer": "Ace Hardware", "price": 21.99, "security": "Medium-Low"}, {"brand": "Schlage", "product": "4 ft Double Loop Cable + Padlock (994800)", "lock_type": "Cable + Padlock", "retailer": "Home Depot", "price": 16.81, "security": "Low"}, {"brand": "Schlage", "product": "15 ft Looped Steel Cable (999263)", "lock_type": "Looped Security Cable", "retailer": "Walmart", "price": 27.88, "security": "Low"}, {"brand": "Schlage", "product": "15 ft Looped Steel Cable (999263)", "lock_type": "Looped Security Cable", "retailer": "Ace Hardware", "price": 23.99, "security": "Low"}, {"brand": "Schlage", "product": "7 ft Flexible Steel Cable (820406)", "lock_type": "Looped Security Cable", "retailer": "Walmart", "price": 33.64, "security": "Low"}, {"brand": "DoubleLock", "product": "Grizzly U-Lock", "lock_type": "U-Lock", "retailer": "Lowe's", "price": 49.99, "security": "High"}, {"brand": "DoubleLock", "product": "Grizzly U-Lock", "lock_type": "U-Lock", "retailer": "Home Depot", "price": 49.99, "security": "High"}, {"brand": "DoubleLock", "product": "BOBCAT 8 Cable Combo", "lock_type": "Cable Lock", "retailer": "Lowe's", "price": 28.19, "security": "Medium-High"}, {"brand": "DoubleLock", "product": "BOBCAT 8 Cable Combo", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 28.19, "security": "Medium-High"}, {"brand": "DoubleLock", "product": "Badger Strap Locks (2x)", "lock_type": "Tie Lock", "retailer": "Lowe's", "price": 22.99, "security": "Low"}, {"brand": "DoubleLock", "product": "Badger Strap Locks (2x)", "lock_type": "Tie Lock", "retailer": "Home Depot", "price": 22.99, "security": "Low"}, {"brand": "DoubleLock", "product": "Panther Cable Lock", "lock_type": "Cable Lock", "retailer": "Lowe's", "price": 19.99, "security": "Medium"}, {"brand": "DoubleLock", "product": "Panther Cable Lock", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 19.99, "security": "Medium"}, {"brand": "Brinks", "product": "Mini U-Lock", "lock_type": "U-Lock", "retailer": "Home Depot", "price": 18.41, "security": "Medium-High"}, {"brand": "Brinks", "product": "5/16 in. Flexible Steel Keyed Lock", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 11.09, "security": "Medium-Low"}, {"brand": "Brinks", "product": "5/16 in Flexible Steel Combination Lock", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 14.58, "security": "Medium-Low"}, {"brand": "Brinks", "product": "3/8 in Outdoor Adjustable Cable", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 22.73, "security": "Medium"}, {"brand": "Brinks", "product": "5/16 in Flexible Steel Combination Lock", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 7.74, "security": "Low"}, {"brand": "Brinks", "product": "3/8 in Covered Steel", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 16.97, "security": "Medium-Low"}, {"brand": "Brinks", "product": "5/8in Flexible Steel Keyed Lock", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 29.97, "security": "Medium-High"}, {"brand": "Brinks", "product": "Brinks Flex Weave 3/8in", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 27.44, "security": "Medium-High"}, {"brand": "Brinks", "product": "Covered Steel 3/8 Keyed", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 35.0, "security": "Medium"}, {"brand": "Bell", "product": "Sports Hands Off U-Lock", "lock_type": "U-Lock", "retailer": "Walmart", "price": 29.02, "security": "Medium-High"}, {"brand": "Bell", "product": "Bell Catalyst 300 U-Lock", "lock_type": "U-Lock", "retailer": "Farm & Fleet", "price": 21.99, "security": "Medium-High"}, {"brand": "Bell", "product": "Bell Catalyst 300 U-Lock", "lock_type": "U-Lock", "retailer": "Academy Sports", "price": 24.99, "security": "Medium-High"}, {"brand": "Bell", "product": "Ballistic 410 Cable Lock", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 12.99, "security": "Low"}, {"brand": "Bell", "product": "Ballistic 610 Keyed Cable Lock", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 19.0, "security": "Low"}, {"brand": "Bell", "product": "Combination Cable Lock Watchdog 99", "lock_type": "Cable Lock", "retailer": "Farm & Fleet", "price": 12.99, "security": "Low"}, {"brand": "Bell", "product": "Combination Cable Lock Watchdog 100", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 21.29, "security": "Low"}, {"brand": "Bell", "product": "Bell Pitcrew 600 Bike Cable Set", "lock_type": "Cable Lock", "retailer": "Farm & Fleet", "price": 13.99, "security": "Low"}, {"brand": "Bell", "product": "Bell Sports Rampage 400 Steel Bike Lock", "lock_type": "Chain Lock", "retailer": "Walmart", "price": 31.63, "security": "Low"}, {"brand": "Bell", "product": "Bell Catalyst 600 Folding Lock", "lock_type": "Folding Lock", "retailer": "Academy Sports", "price": 31.99, "security": "Medium-High"}, {"brand": "Bell", "product": "QuickZip Combo Lock Bundle", "lock_type": "Zip Tie", "retailer": "Target", "price": 19.99, "security": "Low"}, {"brand": "OnGuard", "product": "Bulldog Combo STD DT", "lock_type": "U-Lock + Cable", "retailer": "Home Depot", "price": 52.95, "security": "Medium"}, {"brand": "OnGuard", "product": "Bulldog Combo STD DT", "lock_type": "U-Lock + Cable", "retailer": "Walmart", "price": 64.0, "security": "Medium"}, {"brand": "OnGuard", "product": "Bulldog Mini DT", "lock_type": "U-Lock + Cable", "retailer": "Home Depot", "price": 54.0, "security": "Medium"}, {"brand": "OnGuard", "product": "Bulldog Mini DT", "lock_type": "U-Lock + Cable", "retailer": "Walmart", "price": 59.95, "security": "Medium"}, {"brand": "OnGuard", "product": "Pitbull STD DT", "lock_type": "U-Lock + Cable", "retailer": "Home Depot", "price": 69.49, "security": "High"}, {"brand": "OnGuard", "product": "Pitbull STD DT", "lock_type": "U-Lock + Cable", "retailer": "Walmart", "price": 79.95, "security": "High"}, {"brand": "OnGuard", "product": "Brute", "lock_type": "U-Lock", "retailer": "Walmart", "price": 91.0, "security": "Very High"}, {"brand": "OnGuard", "product": "Beast Chain with X2 Padlock", "lock_type": "Chain Lock + Padlock", "retailer": "Home Depot", "price": 129.99, "security": "Very High"}, {"brand": "OnGuard", "product": "Beast Chain with X2 Padlock", "lock_type": "Chain Lock + Padlock", "retailer": "Lowe's", "price": 129.99, "security": "Very High"}, {"brand": "OnGuard", "product": "Doberman Coil Combo Cable", "lock_type": "Cable Lock", "retailer": "Home Depot", "price": 41.0, "security": "Low"}, {"brand": "OnGuard", "product": "Doberman Coil Combo Cable", "lock_type": "Cable Lock", "retailer": "Walmart", "price": 37.99, "security": "Low"}], "masterlock_prices": [{"brand": "Master Lock", "product": "Black Keyed Cable Lock, Vinyl Coated Braided Steel, 5 ft x 5/16 in (Model: 8109D)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 19.47, "security": "Medium"}, {"brand": "Master Lock", "product": "5ft (1.5m) Long x 3/8in (10mm) Diameter Set Your Own Combination Cable Lock (Model: 8119DPF)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 24.5, "security": "Medium"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/16in (8mm) Diameter Keyed Cable Lock (Model: 8126D)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 21.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Preset Combination Cable Lock, 4 ft x 5/16 in (Model: 8143D)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 9.99, "security": "Low"}, {"brand": "Master Lock", "product": "5ft (1.5m) x 1/4in (6mm) Diameter Standard Combination Cable Lock; Assorted Colors (Model: 8152DASTWD)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 9.99, "security": "Low"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/8in (15mm) Diameter Keyed Cable Lock (Model: 8155DCC)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 47.99, "security": "Medium"}, {"brand": "Master Lock", "product": "3ft (90cm) Bike Lock Chain with 10mm Diameter Hardened Steel Links; 3-1/2in x 14mm Mini U-Lock (Model: 8234EC)", "lock_type": "Chain Lock + Mini U-Lock", "retailer": "masterlock.com", "price": 43.99, "security": "High"}, {"brand": "Master Lock", "product": "Yellow/Black Adjustable Python Braided Steel Cable Lock, 6 ft x 3/8 in (Model: 8413DPF)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 30.32, "security": "Medium"}, {"brand": "Master Lock", "product": "Adjustable Cable Lock, Mossy Oak Blaze Python Lock, 6 ft x 5/16 in - 2-Pack (Model: 8418TCAMOBLZ)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 51.99, "security": "Medium"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/16in (8mm) Diameter Python\u2122 Adjustable Locking Cable 2-pk; Mossy Oak\u00ae Country DNA\u2122 Camouflage (Model: 8418TCAMODNA)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 51.99, "security": "Medium"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/16in (8mm) Diameter Python\u2122 Adjustable Locking Cable; Yellow and Black (Model: 8419DPF)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 21.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Looped End Braided Steel Cable Lock, 4 ft x 3/8 in (Model: 85DPF)", "lock_type": "Looped Security Cable", "retailer": "masterlock.com", "price": 17.99, "security": "Medium"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/16in (8mm) Diameter Set Your Own Combination Cable Lock (Model: 8114D)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 18.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Combination Braided Steel Cable Lock, 6 ft x 1/2 in (Model: 8122D)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 19.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Keyed Braided Steel Cable Lock, 6 ft x 5/16 in, Assorted Colors, 3-Pack (Model: 8127TRI)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 16.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Keyed Braided Steel Cable Lock, 6 ft x 3/8 in (Model: 8154DPF)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 17.99, "security": "Medium"}, {"brand": "Master Lock", "product": "5ft (1.5m) Long x 1/2in (12mm) Diameter Keyed Cable Lock (Model: 8364D)", "lock_type": "Keyed Cable Lock", "retailer": "masterlock.com", "price": 33.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Combination Braided Steel Cable Lock, 5 ft x 1/2 in (Model: 8370D)", "lock_type": "Combination Cable Lock", "retailer": "masterlock.com", "price": 16.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Silver/Black Adjustable Python Braided Steel Cable Lock, 6 ft x 3/16 in (Model: 8417D)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 14.99, "security": "Low"}, {"brand": "Master Lock", "product": "6ft (1.8m) Long x 5/16in (8mm) Diameter Python\u2122 Adjustable Locking Cable; Silver and Black (Model: 8418D)", "lock_type": "Adjustable Cable Lock", "retailer": "masterlock.com", "price": 25.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Looped End Braided Steel Cable Lock, 6 ft x 1/4 in (Model: 65D)", "lock_type": "Looped Security Cable", "retailer": "masterlock.com", "price": 16.99, "security": "Low"}, {"brand": "Master Lock", "product": "3ft (91cm) Long x 3/16in (5mm) Diameter Cable with Integrated Laminated Steel Padlock (Model: 719D)", "lock_type": "Cable + Padlock", "retailer": "masterlock.com", "price": 20.99, "security": "Low"}, {"brand": "Master Lock", "product": "15ft (4.6m) Long x 3/8in (10mm) Diameter Looped End Cable (Model: 72DPF)", "lock_type": "Looped Security Cable", "retailer": "masterlock.com", "price": 21.99, "security": "Medium"}, {"brand": "Master Lock", "product": "Looped End Braided Steel Cable Lock, 6 ft x 3/8 in (Model: 78DPF)", "lock_type": "Looped Security Cable", "retailer": "masterlock.com", "price": 15.99, "security": "Medium"}], "s_n": [{"n": 140}], "s_features": [{"feature": "Security", "count": 130, "share": 0.9285714285714286}, {"feature": "Portability", "count": 78, "share": 0.5571428571428572}, {"feature": "Durability", "count": 61, "share": 0.4357142857142857}, {"feature": "Weight", "count": 9, "share": 0.06428571428571428}, {"feature": "Color", "count": 2, "share": 0.014285714285714285}], "s_pay": [{"range": "Under $15", "count": 48, "share": 0.34285714285714286}, {"range": "$15-$29", "count": 74, "share": 0.5285714285714286}, {"range": "$30-$49", "count": 14, "share": 0.1}, {"range": "$50 or more", "count": 4, "share": 0.02857142857142857}], "s_seen": [{"lock_type": "Cable Lock", "count": 70, "share": 0.5}, {"lock_type": "U-Lock", "count": 64, "share": 0.45714285714285713}, {"lock_type": "Hardened Chain Lock", "count": 3, "share": 0.02142857142857143}, {"lock_type": "Folding Lock", "count": 3, "share": 0.02142857142857143}], "s_branding": [{"answer": "Neither, standard design is fine", "count": 53, "share": 0.37857142857142856}, {"answer": "No preference", "count": 42, "share": 0.3}, {"answer": "Both school branding and colors", "count": 19, "share": 0.1357142857142857}, {"answer": "School branding", "count": 16, "share": 0.11428571428571428}, {"answer": "More color options", "count": 10, "share": 0.07142857142857142}], "s_trust": [{"rating": 1, "count": 4, "share": 0.02857142857142857}, {"rating": 2, "count": 3, "share": 0.02142857142857143}, {"rating": 3, "count": 29, "share": 0.20714285714285716}, {"rating": 4, "count": 66, "share": 0.4714285714285714}, {"rating": 5, "count": 38, "share": 0.2714285714285714}], "s_ownership": [{"question": "Own a bike on campus", "yes": 18, "no": 122}, {"question": "Own a bike lock", "yes": 24, "no": 116}, {"question": "Have seen or heard of bike theft", "yes": 24, "no": 116}], "s_theft": [{"described": 24, "wheels_or_parts": 11}], "s_demand": [{"group": "All Students", "want": 35, "no": 105}, {"group": "Students With Bikes", "want": 6, "no": 12}, {"group": "Students Without Bikes", "want": 29, "no": 93}], "assort": [{"brand": "Master Lock", "lock_type": "Cable lock", "products": 23}, {"brand": "Master Lock", "lock_type": "U-lock", "products": 0}, {"brand": "Master Lock", "lock_type": "U-lock + cable", "products": 0}, {"brand": "Master Lock", "lock_type": "Chain lock", "products": 1}, {"brand": "Master Lock", "lock_type": "Folding lock", "products": 0}, {"brand": "Master Lock", "lock_type": "Tie / zip lock", "products": 0}, {"brand": "Bell", "lock_type": "Cable lock", "products": 7}, {"brand": "Bell", "lock_type": "U-lock", "products": 2}, {"brand": "Bell", "lock_type": "U-lock + cable", "products": 0}, {"brand": "Bell", "lock_type": "Chain lock", "products": 1}, {"brand": "Bell", "lock_type": "Folding lock", "products": 1}, {"brand": "Bell", "lock_type": "Tie / zip lock", "products": 1}, {"brand": "Brinks", "lock_type": "Cable lock", "products": 7}, {"brand": "Brinks", "lock_type": "U-lock", "products": 1}, {"brand": "Brinks", "lock_type": "U-lock + cable", "products": 0}, {"brand": "Brinks", "lock_type": "Chain lock", "products": 0}, {"brand": "Brinks", "lock_type": "Folding lock", "products": 0}, {"brand": "Brinks", "lock_type": "Tie / zip lock", "products": 0}, {"brand": "OnGuard", "lock_type": "Cable lock", "products": 1}, {"brand": "OnGuard", "lock_type": "U-lock", "products": 1}, {"brand": "OnGuard", "lock_type": "U-lock + cable", "products": 3}, {"brand": "OnGuard", "lock_type": "Chain lock", "products": 1}, {"brand": "OnGuard", "lock_type": "Folding lock", "products": 0}, {"brand": "OnGuard", "lock_type": "Tie / zip lock", "products": 0}, {"brand": "DoubleLock", "lock_type": "Cable lock", "products": 2}, {"brand": "DoubleLock", "lock_type": "U-lock", "products": 1}, {"brand": "DoubleLock", "lock_type": "U-lock + cable", "products": 0}, {"brand": "DoubleLock", "lock_type": "Chain lock", "products": 0}, {"brand": "DoubleLock", "lock_type": "Folding lock", "products": 0}, {"brand": "DoubleLock", "lock_type": "Tie / zip lock", "products": 1}, {"brand": "Schlage", "lock_type": "Cable lock", "products": 4}, {"brand": "Schlage", "lock_type": "U-lock", "products": 1}, {"brand": "Schlage", "lock_type": "U-lock + cable", "products": 0}, {"brand": "Schlage", "lock_type": "Chain lock", "products": 0}, {"brand": "Schlage", "lock_type": "Folding lock", "products": 0}, {"brand": "Schlage", "lock_type": "Tie / zip lock", "products": 0}]};
   const calcs = {}, cache = {}, draws = new Map();
   const get = (id) => {
     if (id in cache) return cache[id];
@@ -610,7 +84,12 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
     const c = calcs[id]; if (!c) return null;
     return (cache[id] = c.fn(...c.inputs.map(get)));
   };
-  const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws.get(name)(el); } catch (e) { console.error(name, e); } });
+  const run = (name) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
+    if (!el.offsetParent && getComputedStyle(el).position !== 'fixed') return;
+    try { draws.get(name)(el); } catch (e) { console.error(name, e); }
+  });
+  const all = () => draws.forEach((_, n) => run(n));
+  window.NBredraw = all;
   window.dash = {
     data: (id) => { const d = get(id); return d ? { status: 'ok', data: d, columns: d[0] ? Object.keys(d[0]) : [], meta: [] } : { status: 'missing', data: [] }; },
     calc: (id, spec) => { calcs[id] = spec; },
@@ -618,10 +97,10 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
     colors: ['#13294B', '#E8822F', '#3D6FB6', '#2A8C8C', '#8E5B8C', '#9AA5B8', '#C9A227', '#5E6B7E'],
     draw: (name, fn) => { if (fn) { draws.set(name, fn); if (document.readyState !== 'loading') run(name); } else run(name); },
   };
-  document.addEventListener('DOMContentLoaded', () => draws.forEach((_, n) => run(n)));
+  document.addEventListener('DOMContentLoaded', all);
   let w = window.innerWidth, t;
-  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if (window.innerWidth !== w) { w = window.innerWidth; draws.forEach((_, n) => run(n)); } }, 150); });
-  if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => draws.forEach((_, n) => run(n)));
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if (window.innerWidth !== w) { w = window.innerWidth; all(); } }, 150); });
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', all);
 })();
 </script>
 <style>
@@ -700,14 +179,20 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
     </div>
     <div class="nb-logos"><img alt="Fortune Brands Innovations" src="data:image/png;base64,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"><img alt="NOBE Illinois" src="data:image/png;base64,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"></div>
   </header>
+  <div class="nb-tabs" role="tablist" aria-label="Sections">
+    <button class="nb-tab" role="tab" id="t-pricing" aria-controls="p-pricing" aria-selected="true" data-tab="pricing">Pricing comparison</button>
+    <button class="nb-tab" role="tab" id="t-survey" aria-controls="p-survey" aria-selected="false" data-tab="survey">Student survey results</button>
+    <button class="nb-tab" role="tab" id="t-insights" aria-controls="p-insights" aria-selected="false" data-tab="insights">Insights for Master Lock</button>
+  </div>
 
-  <p class="nb-take">Master Lock's median cable lock is <b data-draw="tk-cd" data-source="compare" data-field="diff" data-where="category=Cable">—</b> <span data-draw="tk-cw" data-source="compare" data-field="diff" data-where="category=Cable">—</span> the competitor median, and its median U-lock is <b data-draw="tk-ud" data-source="compare" data-field="diff" data-where="category=U-lock">—</b> <span data-draw="tk-uw" data-source="compare" data-field="diff" data-where="category=U-lock">—</span>. Competitor U-lock prices are pulled up by OnGuard's premium bundles.</p>
+  <section class="nb-panel" id="p-pricing" role="tabpanel" aria-labelledby="t-pricing">
+  <p class="nb-take">Master Lock's median cable lock is <b data-draw="tk-cd" data-source="compare" data-field="diff" data-where="category=Cable">—</b> <span data-draw="tk-cw" data-source="compare" data-field="diff" data-where="category=Cable">—</span> the competitor median. Our dataset has no Master Lock U-locks yet, while competitor U-locks have a median price of <b data-draw="tk-cu" data-source="compare" data-field="comp_median" data-where="category=U-lock">—</b>.</p>
 
   <div class="nb-tiles">
-    <div class="nb-tile"><span>Competitor cable median</span><strong data-draw="k-cc" data-source="compare" data-field="comp_median" data-where="category=Cable" class="dash-skeleton">—</strong><em data-draw="k-ccn" data-source="compare" data-field="comp_listings" data-where="category=Cable">—</em></div>
-    <div class="nb-tile ml"><span>Master Lock cable median</span><strong data-draw="k-mc" data-source="compare" data-field="ml_median" data-where="category=Cable" class="dash-skeleton">—</strong><em data-draw="k-mcn" data-source="compare" data-field="ml_listings" data-where="category=Cable">—</em></div>
-    <div class="nb-tile"><span>Competitor U-lock median</span><strong data-draw="k-cu" data-source="compare" data-field="comp_median" data-where="category=U-lock" class="dash-skeleton">—</strong><em data-draw="k-cun" data-source="compare" data-field="comp_listings" data-where="category=U-lock">—</em></div>
-    <div class="nb-tile ml"><span>Master Lock U-lock median</span><strong data-draw="k-mu" data-source="compare" data-field="ml_median" data-where="category=U-lock" class="dash-skeleton">—</strong><em data-draw="k-mun" data-source="compare" data-field="ml_listings" data-where="category=U-lock">—</em></div>
+    <div class="nb-tile"><span>Competitor cable median</span><strong data-draw="k-cc" class="dash-skeleton">—</strong><em data-draw="k-ccn">—</em></div>
+    <div class="nb-tile ml"><span>Master Lock cable median</span><strong data-draw="k-mc" class="dash-skeleton">—</strong><em data-draw="k-mcn">—</em></div>
+    <div class="nb-tile"><span>Competitor U-lock median</span><strong data-draw="k-cu" class="dash-skeleton">—</strong><em data-draw="k-cun">—</em></div>
+    <div class="nb-tile ml"><span>Master Lock products in dataset</span><strong data-draw="k-mlp" class="dash-skeleton">—</strong><em>cable locks plus one chain lock</em></div>
   </div>
 
   <div class="nb-bar" role="group" aria-label="Highlight a brand">
@@ -729,13 +214,14 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
     </section>
     <section class="nb-card" id="ulock">
       <h3>U-lock prices by competitor</h3>
-      <p>U-locks and U-lock + cable bundles. OnGuard's bundles sit far above the rest, while Master Lock spreads from entry to mid-premium.</p>
+      <p>U-locks and U-lock + cable bundles. OnGuard's bundles sit far above the rest. Master Lock has no U-locks in our dataset yet.</p>
       <div class="nb-chart tall dash-skeleton" data-draw="c-ulock" data-source="competitor_prices masterlock_prices cat_brand"></div>
     </section>
-    <section class="nb-card" id="security">
-      <h3>Security level vs. price</h3>
-      <p>Competitor listings by the team's security rating. The gray line in each column is its median. Dots low in a column are good value for that security level.</p>
-      <div class="nb-chart tall dash-skeleton" data-draw="c-sec" data-source="competitor_prices"></div>
+    <section class="nb-card" id="assortment">
+      <h3>Product assortment by brand and lock type</h3>
+      <p>Number of unique products each brand sells, split by lock type. Labels show each lock type's share of that brand's lineup.</p>
+      <div class="nb-legend" data-draw="c-assort-key"></div>
+      <div class="nb-chart tall" data-draw="c-assort"></div>
     </section>
     <section class="nb-card" id="versus">
       <h3>Competitors vs. Master Lock, by lock type</h3>
@@ -747,12 +233,170 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
   <div class="nb-notes">
     <strong>About the data</strong>
     <ul>
-      <li>Competitor prices come from the team's cleaned research sheet (Compiled Competitor Research, cleaned copy). Two listings with no price, plus tie and zip-tie locks, are left out of the lock-type charts.</li>
-      <li>Master Lock prices are list prices on masterlock.com (checked Nov. 1, 2026) plus four Home Depot and Target listings checked Oct. 25, 2026. Sold-out items, a 3-pack and one product we could not classify are left out.</li>
-      <li>Competitor prices are retailer shelf prices, while most Master Lock prices are Master Lock's own list prices, so small gaps may come from where the price was taken.</li>
-      <li>Security levels are the team's own ratings and exist for competitors only, so Master Lock is not in the security chart.</li>
+      <li>All prices and products come from the team's Compiled Competitor Research sheet. Competitor listings without a price are left out of the price charts but counted in the product assortment chart.</li>
+      <li>Master Lock prices are the team's masterlock.com prices. Retailers for Master Lock products are still being added. Two Python cable 2-packs and one 3-pack are listed at pack price, and the 8418D cable listed as "$25.99–$51.99" uses $25.99.</li>
+      <li>Competitor prices are retailer shelf prices, while Master Lock prices are its own website prices, so small gaps may come from where the price was taken.</li>
+      <li>Unique products count each product once even when it is sold at several retailers.</li>
     </ul>
   </div>
+
+  </section>
+
+  <section class="nb-panel" id="p-survey" role="tabpanel" aria-labelledby="t-survey" hidden>
+    <p class="nb-take">We surveyed <b data-draw="s-n">—</b> UIUC students about how they choose, use and pay for bike locks, and how they see Master Lock. Security comes first, most students want to spend under $30, and Master Lock is well trusted.</p>
+    <div class="nb-tiles">
+      <div class="nb-tile"><span>Respondents</span><strong data-draw="s-k-n">—</strong><em>UIUC students, Oct. 2026</em></div>
+      <div class="nb-tile"><span>Picked security as a top-2 feature</span><strong data-draw="s-k-sec">—</strong><em>the most chosen feature by far</em></div>
+      <div class="nb-tile"><span>Want to spend under $30</span><strong data-draw="s-k-pay">—</strong><em>under $15 or $15–29</em></div>
+      <div class="nb-tile ml"><span>Rate Master Lock 4 or 5 out of 5</span><strong data-draw="s-k-trust">—</strong><em>brand trust and reliability</em></div>
+    </div>
+    <h2 class="nb-sec">Survey purpose and insights</h2>
+    <div class="nb-tablewrap"><table class="nb-svtable">
+      <thead><tr><th scope="col">Purpose</th><th scope="col">Insights</th><th scope="col">Statistics</th></tr></thead>
+      <tbody>
+<tr><th scope="row"><strong>Understand Student Needs</strong><span>Identify which lock features students value most, including security, portability, and durability. Explore interest in school-branded locks and additional color options.</span></th><td>Security, portability, and durability are the three most important product attributes. Color was rarely selected as a top feature.</td><td>93% picked security as a top-2 feature. 56% picked portability. 50% picked security and portability together.</td></tr>
+<tr><th scope="row"><strong>Evaluate Buying Behavior</strong><span>Determine students&#x27; willingness to pay for bike locks and their current ownership habits.</span></th><td>Below $30 is the largest price band selected by students, few students are willing to spend above $30. Cable locks and U-locks account for majority of reported campus lock sightings. Neither type overwhelmingly dominates, suggesting that students encounter both styles regularly.</td><td>$15–$29 range selected by 53% of respondents, 34% prefer to spend under $15, 13% are willing to spend $30 or more. Totaled, 87% Prioritize Budget under $30. 96% of campus sightings were either U-Lock or Cable Lock</td></tr>
+<tr><th scope="row"><strong>Identify Growth Opportunities</strong><span>Assess how students perceive Master Lock&#x27;s reliability compared with their security needs.
+Gather consumer input to guide product positioning, pricing, and campus marketing strategies.</span></th><td>Trust in Master Lock&#x27;s brand was rated well on a 5 star basis, with many students who chose security as a top feature, also rating Master Lock high.</td><td>74% rated Master Lock a 4 or 5 out of 5.</td></tr>
+<tr><th scope="row"><strong>Identify Campus Theft</strong><span>Understand concerns surrounding campus bike theft and everyday bike security.</span></th><td>Protecting only one component of a bike can leave the rest vulnerable. Our findings suggest an opportunity to address both the lock itself and how students secure their frame, wheels, and helmets.</td><td>24 of 140 students (17%) described a theft they saw or heard about. 11 of those mention wheels or parts taken or left behind.</td></tr>
+<tr><th scope="row"><strong>Determine Ideal Price Point</strong><span>Identify the price range students would prefer for a bike lock to guide Master Lock’s pricing strategy for a campus-focused product.</span></th><td>The $15–$29 range is preferred by about half of students, and 87% overall want a lock under $30. A mid-priced lock that delivers strong security and portability is likely to reach the largest share of students, while a simpler option under $15 could capture more price-sensitive buyers.</td><td>34% of students would prefer a bike lock under $15 and 53% would prefer one between $15 and $29.</td></tr>
+      </tbody></table></div>
+    <h2 class="nb-sec">Survey graphs</h2>
+    <div class="nb-grid">
+      <section class="nb-card"><h3>Price students are willing to pay for bike locks</h3><p>Number of students choosing each price range.</p><div class="nb-chart short" data-draw="s-pay2"></div></section>
+      <section class="nb-card"><h3>Master Lock trust by top features</h3><p>Average trust rating (out of 5) for students grouped by the two features they picked as most important.</p><div class="nb-chart short" data-draw="s-tpair"></div></section>
+    </div>
+    <section class="nb-card"><h3>Demand for UIUC-branded bike locks</h3><p>Students who picked "School branded design" or "Both school branding and additional color options," by whether they own a bike.</p>
+      <div class="nb-chart short" data-draw="s-pies"></div></section>
+    <h2 class="nb-sec">More survey results</h2>
+    <div class="nb-grid">
+      <section class="nb-card"><h3>Most important lock features</h3><p>Share of students who picked each feature as one of their top two.</p><div class="nb-chart short" data-draw="s-feat"></div></section>
+      <section class="nb-card"><h3>Most common lock seen on campus</h3><p>Cable locks and U-locks make up almost every lock students notice.</p><div class="nb-chart short" data-draw="s-seen"></div></section>
+      <section class="nb-card"><h3>Master Lock trust rating</h3><p>"How trustworthy or reliable do you see Master Lock as a company?" (1 = low, 5 = high)</p><div class="nb-chart short" data-draw="s-trust"></div></section>
+      <section class="nb-card"><h3>Bikes, locks and theft</h3><p>Most respondents don't have a bike on campus yet. Many theft stories describe wheels or parts taken while the locked part stayed behind.</p><div class="nb-chart short" data-draw="s-own"></div></section>
+      <section class="nb-card"><h3>Interest in branding and colors</h3><p>"Would you be more likely to buy a bike lock with your school's branding or additional colorways?"</p><div class="nb-chart short" data-draw="s-brand"></div></section>
+    </div>
+    <div class="nb-notes"><strong>About the data</strong><ul><li>Student Bike and Bike Lock Survey, 140 UIUC respondents, Oct. 2026. Shares are of all 140 respondents. Names and emails are not included on this site.</li><li>The price, trust-by-feature and branding graphs recreate the team's Tableau and Excel survey graphs.</li><li>Lock ownership and theft answers were free text and grouped into yes or no by hand. Only 18 respondents own a bike on campus, so results for bike owners are an early signal.</li></ul></div>
+  </section>
+
+  <section class="nb-panel" id="p-insights" role="tabpanel" aria-labelledby="t-insights" hidden>
+    <p class="nb-take">What Master Lock could do next, based on our competitor research. Each insight lists what we observed, the evidence, a potential opportunity and a question to discuss with Master Lock.</p>
+    <div class="nb-ins-list">
+    <article class="nb-ins">
+      <h3><span>1</span>Master Lock doesn&#x27;t really utilize sponsorships to its best potential.</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>So far they only sponsor 100-foot supermaxi racing yacht, Comanche, officially named Master Lock</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Dive into sponsoring actual biking events and teams.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>What is holding Master Lock from sponsoring?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>2</span>Master Lock doesn&#x27;t promote features to target their target audience.</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>They do not have ratings and features that are easy to differentiate from competitors.</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Place security ratings and portability features directly onto packaging.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Is there a reason there isn&#x27;t more on Master Lock&#x27;s Packaging?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>3</span>Master Lock sells many cable locks at nearly the same price, with no clear reason to pick one over another.</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>11 cable locks fall between $9.99 and $21.99, most about $1 apart.</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Cut the range to three clear tiers (basic, keyed, heavy-duty), each with a visible reason to pay more.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Which of these cable locks sell the most, and are any selling so little that Master Lock could drop them without losing revenue?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>4</span>Master Lock doesn&#x27;t have discounts on their website</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>The discounts and sales that are offered on their products are through their retailers such as target and home depot, their website itself where you can order Master Lock to be shipped to your door doesn&#x27;t have discounts</dd></div>
+        <div><dt>Potential opportunity</dt><dd>They can offer discounts on their website itself, sales or promotions. They can also have a system that instead of ordering from the Master Lock website, the website will direct the customer to the nearest retailer where they can pick it up so if they need it soon, it removes the delivery waiting period.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Is there a reason they do not have discounts on their main page?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>5</span>Master Lock&#x27;s UI on their website can be improved</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>On their website they do not have a lot of pictures of their locks or diagrams explaining the features that they highlight in text.</dd></div>
+        <div><dt>Potential opportunity</dt><dd>They can mimic their competitors or choose their own UI design that showcases their unique features. These reference photos can be added on their website for their popular locks.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Why isn&#x27;t this already on their website? Is it a part of their marketing strategy?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>6</span>Master Lock doesn&#x27;t offer many bundles like their competitors</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>Their competitors offer bundles with multiple locks and other items.</dd></div>
+        <div><dt>Potential opportunity</dt><dd>They can offer similar bundles with a cable lock and a Master Lock or other items, this can be tied in seasonally.</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Does this go against their pricing strategy?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>7</span>Master Lock doesn&#x27;t offer a mini U-lock for portability needs</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>They have regular sized U-locks but could create a mini U-lock for commuters similar to Brinks&#x27; option</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Master Lock could add a mini U-lock to its product line which should fall under $20 to remain competitive with Brinks</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Is Master Lock looking to expand its product portfolio?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>8</span>Master Lock doesn&#x27;t offer a student-priced U-lock</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>OnGuard&#x27;s cheapest U-lock bundle is about $52, which leaves a gap below it for budget-conscious students</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Launch a student U-lock priced at $25–$35 to fill the gap below OnGuard&#x27;s cheapest bundle</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Can Master Lock hit the $25–$35 price point without lowering its security rating?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>9</span>Master Lock doesn&#x27;t have a lightweight combination bike lock</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>OnGuard&#x27;s secure locks are heavy and mostly keyed, and Master Lock is already the familiar school-locker combination brand</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Create a light combination bike lock that uses students&#x27; existing familiarity with Master Lock combination locks</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Would students see a combination bike lock as secure as a keyed one?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>10</span>Competitors aren&#x27;t marketing bike locks to students. OnGuard markets toughness rather than targeting students</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>College students and their families planned a record $103.5B in back-to-school spending in 2026 (about $1,438 each), and 25% plan to shop at college bookstores</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Take advantage of the back-to-school season with campus bookstore and move-in promotions, such as a bike lock bundled with a dorm padlock</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Which campus bookstores or retailers would Master Lock need to partner with to run these promotions?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>11</span>Master Lock doesn&#x27;t have safety ratings</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>People aren&#x27;t able to discern what level of security that they are paying for at their desired price point</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Partner with a company or U.S firm that tests bike locks so people can figure out what level of security they are paying for</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>What is holding Master Lock from partnering with companies to do this and what does the cost of it look like?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>12</span>Master Lock has less competition at Lowe&#x27;s and Target</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>Schlage isn&#x27;t sold at either store, so Master Lock only competes with Kryptonite there</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Focus on getting more shelf space and promotions at Lowe&#x27;s and Target</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Why isn&#x27;t Schlage sold at Lowe&#x27;s or Target?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>13</span>Master Lock&#x27;s cable locks cost more than Schlage&#x27;s</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>Schlage&#x27;s 15 ft cable is cheaper than Master Lock&#x27;s for the same length, and its 5 ft keyed cable costs almost half as much</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Lower the price of Master Lock&#x27;s cable locks to compete with Schlage</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>Can Master Lock lower these prices without losing too much profit?</dd></div>
+      </dl>
+    </article>
+    <article class="nb-ins">
+      <h3><span>14</span>Master Lock doesn&#x27;t have clear security labels</h3>
+      <dl>
+        <div><dt>Evidence</dt><dd>Schlage doesn&#x27;t label its locks by security level either, so buyers can&#x27;t see an upgrade path</dd></div>
+        <div><dt>Potential opportunity</dt><dd>Label locks as Basic, High, or Max so buyers know what level of security they&#x27;re paying for</dd></div>
+        <div><dt>Question for Master Lock</dt><dd>What would a lock need to have to count as Basic, High, or Max?</dd></div>
+      </dl>
+    </article>
+    </div>
+    <div class="nb-notes"><strong>About the data</strong><ul><li>Insights come from the team's "Insights for Master Lock" sheet in the Compiled Competitor Research workbook. They are preliminary and meant for discussion.</li></ul></div>
+  </section>
 </div>
 <script>
 (() => {
@@ -853,9 +497,10 @@ dash.calc('compare', {
   dash.draw('k-mcn', pick('compare', cat('Cable'), (r) => n(r.ml_listings, 'Master Lock listing')));
   dash.draw('k-cu', pick('compare', cat('U-lock'), (r) => NB.money(r.comp_median)));
   dash.draw('k-cun', pick('compare', cat('U-lock'), (r) => n(r.comp_listings, 'competitor listing')));
-  dash.draw('k-mu', pick('compare', cat('U-lock'), (r) => NB.money(r.ml_median)));
+  dash.draw('k-mlp', (el) => { el.classList.remove('dash-skeleton'); el.textContent = new Set(dash.data('masterlock_prices').data.map((r) => r.product)).size; });
+  dash.draw('tk-cu', pick('compare', cat('U-lock'), (r) => NB.money(r.comp_median)));
   dash.draw('k-mun', pick('compare', cat('U-lock'), (r) => n(r.ml_listings, 'Master Lock listing')));
-  const CHARTS = ['c-cable', 'c-ulock', 'c-sec', 'c-vs'];
+  const CHARTS = ['c-cable', 'c-ulock', 'c-assort', 'c-vs'];
   document.querySelectorAll('.nb-chip').forEach((b) => b.addEventListener('click', () => {
     NB.hl = b.getAttribute('data-brand') || '';
     document.querySelectorAll('.nb-chip').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
@@ -974,7 +619,216 @@ dash.draw('c-vs', (el) => {
 });
 </script>
 
-<p class="site-foot">Prepared by NOBE Illinois for Fortune Brands Innovations · Data: team competitor research (cleaned) and masterlock.com, Oct.–Nov. 2026</p>
+<script>
+(() => {
+  const S = (k) => dash.data(k).data;
+  const pct = d3.format('.0%');
+  const txt = (name, f) => dash.draw(name, (el) => { el.textContent = f(); });
+  txt('s-n', () => S('s_n')[0].n); txt('s-k-n', () => S('s_n')[0].n);
+  txt('s-k-sec', () => pct(S('s_features').find((r) => r.feature === 'Security').share));
+  txt('s-k-pay', () => pct(d3.sum(S('s_pay').filter((r) => r.range === 'Under $15' || r.range === '$15-$29'), (r) => r.share)));
+  txt('s-k-trust', () => pct(d3.sum(S('s_trust').filter((r) => r.rating >= 4), (r) => r.share)));
+
+  const bars = (el, rows, key, hi) => {
+    el.replaceChildren();
+    const W = el.clientWidth, rowH = 30;
+    const svg = d3.select(el).append('svg').attr('width', '100%');
+    const l = NB.measure(svg, rows.map((r) => r[key])) + 12, vr = NB.measure(svg, rows.map((r) => pct(r.share) + ' (' + r.count + ')'), 'val') + 12;
+    const m = { t: 4, r: vr, b: 4, l }, H = m.t + m.b + rowH * rows.length;
+    svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.share)], [m.l, W - m.r]);
+    const y = d3.scaleBand(rows.map((r) => r[key]), [m.t, H - m.b]).padding(0.25);
+    const tip = NB.tip(el), navy = getComputedStyle(el).getPropertyValue('--nb-navy').trim(), org = NB.color(el, 'Master Lock');
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'lab').attr('x', m.l - 10).attr('y', (r) => y(r[key]) + y.bandwidth() / 2)
+      .attr('dy', '0.35em').attr('text-anchor', 'end').text((r) => r[key]);
+    const g = svg.append('g').attr('class', 'in');
+    g.selectAll('rect').data(rows).join('rect').attr('x', m.l).attr('y', (r) => y(r[key])).attr('height', y.bandwidth())
+      .attr('width', (r) => Math.max(1, x(r.share) - m.l)).attr('rx', 3).attr('fill', (r, i) => (hi(r, i) ? org : navy))
+      .on('pointermove', (ev, r) => tip.show(ev, [r[key], r.count + ' of ' + S('s_n')[0].n + ' students', pct(r.share)])).on('pointerleave', tip.hide);
+    g.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (r) => x(r.share) + 6).attr('y', (r) => y(r[key]) + y.bandwidth() / 2)
+      .attr('dy', '0.35em').text((r) => pct(r.share) + ' (' + r.count + ')');
+  };
+  dash.draw('s-feat', (el) => bars(el, S('s_features'), 'feature', (r, i) => i === 0));
+  dash.draw('s-pay', (el) => bars(el, S('s_pay'), 'range', (r) => r.range === '$15-$29'));
+  dash.draw('s-seen', (el) => bars(el, S('s_seen'), 'lock_type', (r, i) => i < 2));
+  dash.draw('s-brand', (el) => bars(el, S('s_branding'), 'answer', (r) => /branding/i.test(r.answer)));
+
+  dash.draw('s-trust', (el) => {
+    el.replaceChildren();
+    const rows = S('s_trust'), W = el.clientWidth, H = 210, m = { t: 22, r: 8, b: 30, l: 8 };
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleBand(rows.map((r) => String(r.rating)), [m.l, W - m.r]).padding(0.3);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => r.count)], [H - m.b, m.t]);
+    const tip = NB.tip(el), navy = getComputedStyle(el).getPropertyValue('--nb-navy').trim(), org = NB.color(el, 'Master Lock');
+    svg.append('g').attr('class', 'ax').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickSize(0).tickPadding(8).tickFormat((d) => d + ' / 5'))
+      .attr('font-size', null).attr('font-family', null);
+    const g = svg.append('g').attr('class', 'in');
+    g.selectAll('rect').data(rows).join('rect').attr('x', (r) => x(String(r.rating))).attr('width', x.bandwidth()).attr('y', (r) => y(r.count))
+      .attr('height', (r) => H - m.b - y(r.count)).attr('rx', 3).attr('fill', (r) => (r.rating >= 4 ? org : navy))
+      .on('pointermove', (ev, r) => tip.show(ev, ['Rating ' + r.rating + ' of 5', r.count + ' students', pct(r.share)])).on('pointerleave', tip.hide);
+    g.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (r) => x(String(r.rating)) + x.bandwidth() / 2).attr('y', (r) => y(r.count) - 6)
+      .attr('text-anchor', 'middle').text((r) => r.count + ' (' + pct(r.share) + ')');
+  });
+
+
+  dash.draw('s-tpair', (el) => {
+    el.replaceChildren();
+    const rows = S('s_trust_pair'), W = el.clientWidth, rowH = 32;
+    const svg = d3.select(el).append('svg').attr('width', '100%');
+    const l = NB.measure(svg, rows.map((r) => r.pair)) + 12, vr = NB.measure(svg, rows.map((r) => r.avg.toFixed(2) + ' (n=' + r.count + ')'), 'val') + 12;
+    const m = { t: 4, r: vr, b: 26, l }, H = m.t + m.b + rowH * rows.length;
+    svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleLinear([0, 5], [m.l, W - m.r]);
+    const y = d3.scaleBand(rows.map((r) => r.pair), [m.t, H - m.b]).padding(0.25);
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5).tickSize(-(H - m.t - m.b)))
+      .attr('font-size', null).attr('font-family', null);
+    const tip = NB.tip(el), navy = getComputedStyle(el).getPropertyValue('--nb-navy').trim(), org = NB.color(el, 'Master Lock');
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'lab').attr('x', m.l - 10).attr('y', (r) => y(r.pair) + y.bandwidth() / 2)
+      .attr('dy', '0.35em').attr('text-anchor', 'end').text((r) => r.pair);
+    const g = svg.append('g').attr('class', 'in');
+    g.selectAll('rect').data(rows).join('rect').attr('x', m.l).attr('y', (r) => y(r.pair)).attr('height', y.bandwidth())
+      .attr('width', (r) => x(r.avg) - m.l).attr('rx', 3).attr('fill', (r) => (/Security/.test(r.pair) ? org : navy))
+      .on('pointermove', (ev, r) => tip.show(ev, [r.pair, 'Average trust ' + r.avg.toFixed(2) + ' / 5', r.count + ' students'])).on('pointerleave', tip.hide);
+    g.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (r) => x(r.avg) + 6).attr('y', (r) => y(r.pair) + y.bandwidth() / 2)
+      .attr('dy', '0.35em').text((r) => r.avg.toFixed(2) + ' (n=' + r.count + ')');
+  });
+  dash.draw('s-own', (el) => {
+    el.replaceChildren();
+    const rows = S('s_ownership'), W = el.clientWidth, rowH = 46;
+    const svg = d3.select(el).append('svg').attr('width', '100%');
+    const m = { t: 4, r: 8, b: 4, l: 8 }, H = m.t + m.b + rowH * rows.length + 30;
+    svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleLinear([0, 1], [m.l, W - m.r]);
+    const tip = NB.tip(el), navy = getComputedStyle(el).getPropertyValue('--nb-navy').trim(), org = NB.color(el, 'Master Lock');
+    const g = svg.append('g').attr('class', 'in');
+    rows.forEach((r, i) => {
+      const n = r.yes + r.no, y0 = m.t + i * rowH;
+      g.append('text').attr('class', 'lab').attr('x', m.l).attr('y', y0 + 12).text(r.question);
+      g.append('rect').attr('x', x(0)).attr('y', y0 + 18).attr('height', 18).attr('width', x(r.yes / n) - x(0)).attr('fill', org).attr('rx', 3)
+        .on('pointermove', (ev) => tip.show(ev, [r.question, 'Yes: ' + r.yes + ' (' + pct(r.yes / n) + ')'])).on('pointerleave', tip.hide);
+      g.append('rect').attr('x', x(r.yes / n) + 2).attr('y', y0 + 18).attr('height', 18).attr('width', Math.max(0, x(1) - x(r.yes / n) - 2)).attr('fill', navy).attr('fill-opacity', 0.25).attr('rx', 3)
+        .on('pointermove', (ev) => tip.show(ev, [r.question, 'No: ' + r.no + ' (' + pct(r.no / n) + ')'])).on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'val').attr('x', x(1) - 4).attr('y', y0 + 12).attr('text-anchor', 'end').text('Yes ' + r.yes + ' (' + pct(r.yes / n) + ')');
+    });
+    const d = S('s_theft')[0];
+    g.append('text').attr('class', 'val').attr('x', m.l).attr('y', H - 8).text(d.wheels_or_parts + ' of ' + d.described + ' theft stories mention wheels, tires or parts left behind or taken');
+  });
+
+  dash.draw('s-pies', (el) => {
+    el.replaceChildren();
+    const wrap = document.createElement('div'); wrap.className = 'nb-pies'; el.appendChild(wrap);
+    const org = NB.color(el, 'Master Lock'), navy = getComputedStyle(el).getPropertyValue('--nb-navy').trim();
+    S('s_demand').forEach((r) => {
+      const n = r.want + r.no, box = document.createElement('div'); wrap.appendChild(box);
+      const W = 200, H = 230, R = 70;
+      const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+      svg.append('text').attr('class', 'lab').attr('x', W / 2).attr('y', 16).attr('text-anchor', 'middle').attr('font-weight', 700).text(r.group);
+      svg.append('text').attr('x', W / 2).attr('y', 32).attr('text-anchor', 'middle').text('n = ' + n);
+      const arcs = d3.pie().sort(null)([r.want, r.no]);
+      const arc = d3.arc().innerRadius(R * 0.55).outerRadius(R);
+      const g = svg.append('g').attr('class', 'in').attr('transform', `translate(${W / 2},${44 + R + 4})`);
+      g.selectAll('path').data(arcs).join('path').attr('d', arc).attr('fill', (d, i) => (i ? navy : org)).attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+      g.append('text').attr('class', 'lab').attr('text-anchor', 'middle').attr('dy', '0.35em').attr('font-size', 18).attr('font-weight', 700).text(pct(r.want / n));
+      svg.append('text').attr('class', 'val').attr('x', W / 2).attr('y', H - 8).attr('text-anchor', 'middle').text(r.want + ' want UIUC branding');
+    });
+  });
+
+  dash.draw('p-ladder', (el) => {
+    el.replaceChildren();
+    const rows = S('ladder'), W = el.clientWidth, H = 380, m = { t: 12, r: 96, b: 40, l: 52 };
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleLinear([1, d3.max(rows, (r) => r.rank)], [m.l, W - m.r]);
+    const y = d3.scaleLinear([0, Math.ceil(d3.max(rows, (r) => r.price) / 20) * 20], [H - m.b, m.t]);
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickFormat((v) => '$' + v).tickSize(-(W - m.l - m.r)))
+      .attr('font-size', null).attr('font-family', null);
+    svg.append('g').attr('class', 'ax').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.min(12, Math.floor((W - m.l - m.r) / 40))).tickFormat(d3.format('d')))
+      .attr('font-size', null).attr('font-family', null);
+    svg.append('text').attr('x', (m.l + W - m.r) / 2).attr('y', H - 6).attr('text-anchor', 'middle').text('Product, cheapest to most expensive →');
+    const tip = NB.tip(el), g = svg.append('g').attr('class', 'in');
+    const groups = d3.group(rows, (r) => r.brand);
+    const ends = [];
+    groups.forEach((rs, b) => {
+      const c = NB.color(el, b), isML = b === 'Master Lock';
+      g.append('path').datum(rs).attr('fill', 'none').attr('stroke', c).attr('stroke-width', isML ? 3 : 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line((r) => x(r.rank), (r) => y(r.price)));
+      g.selectAll('c' + b).data(rs).join('circle').attr('cx', (r) => x(r.rank)).attr('cy', (r) => y(r.price)).attr('r', isML ? 4 : 3.5).attr('fill', c)
+        .on('pointermove', (ev, r) => tip.show(ev, [b + ' · product ' + r.rank, NB.money(r.price)])).on('pointerleave', tip.hide);
+      const last = rs[rs.length - 1]; ends.push({ b, c, x: x(last.rank) + 8, y: y(last.price) });
+    });
+    ends.sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    g.selectAll('text.e').data(ends).join('text').attr('class', 'lab e').attr('x', (d) => d.x).attr('y', (d) => d.y).attr('dy', '0.35em')
+      .attr('font-weight', (d) => (d.b === 'Master Lock' ? 700 : null)).attr('fill', (d) => d.c).text((d) => d.b);
+  });
+
+  const show = (name) => {
+    document.querySelectorAll('.nb-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    document.querySelectorAll('.nb-panel').forEach((p) => { p.hidden = p.id !== 'p-' + name; });
+    if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
+    window.NBredraw && window.NBredraw();
+  };
+  document.querySelectorAll('.nb-tab').forEach((t) => t.addEventListener('click', () => show(t.dataset.tab)));
+  const h = location.hash.slice(1);
+  if (['pricing', 'survey', 'insights'].includes(h)) document.addEventListener('DOMContentLoaded', () => show(h));
+})();
+</script>
+
+<script>
+(() => {
+  const LT = [['Cable lock', '--lt-cable'], ['U-lock', '--lt-ulock'], ['U-lock + cable', '--lt-ucable'], ['Chain lock', '--lt-chain'], ['Folding lock', '--lt-folding'], ['Tie / zip lock', '--lt-tie']];
+  const col = (el, v) => getComputedStyle(el).getPropertyValue(v).trim();
+  dash.draw('c-assort-key', (el) => {
+    el.replaceChildren(...LT.map(([n, v]) => { const s = document.createElement('span'); const i = document.createElement('i'); i.style.background = col(el, v); s.append(i, n); return s; }));
+  });
+  dash.draw('c-assort', (el) => {
+    el.replaceChildren();
+    const rows = dash.data('assort').data, brands = [...new Set(rows.map((r) => r.brand))];
+    const tot = (b) => d3.sum(rows.filter((r) => r.brand === b), (r) => r.products);
+    const W = el.clientWidth, H = 460, m = { t: 22, r: 8, b: 40, l: 40 };
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleBand(brands, [m.l, W - m.r]).padding(0.28);
+    const y = d3.scaleLinear([0, d3.max(brands, tot)], [H - m.b, m.t]).nice();
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickFormat(d3.format('d')).tickSize(-(W - m.l - m.r)))
+      .attr('font-size', null).attr('font-family', null);
+    svg.append('g').attr('class', 'ax').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickSize(0).tickPadding(8))
+      .attr('font-size', null).attr('font-family', null).selectAll('text').attr('font-weight', (d) => (d === 'Master Lock' ? 700 : null));
+    svg.append('text').attr('transform', `translate(12,${(m.t + H - m.b) / 2}) rotate(-90)`).attr('text-anchor', 'middle').text('Unique products');
+    const tip = NB.tip(el), g = svg.append('g').attr('class', 'in');
+    brands.forEach((b) => {
+      let y0 = 0; const t = tot(b), op = NB.op(b);
+      LT.forEach(([n, v]) => {
+        const r = rows.find((d) => d.brand === b && d.lock_type === n); if (!r || !r.products) return;
+        const y1 = y0 + r.products, share = r.products / t, hpx = y(y0) - y(y1);
+        g.append('rect').attr('x', x(b)).attr('width', x.bandwidth()).attr('y', y(y1)).attr('height', Math.max(0, hpx - 1)).attr('fill', col(el, v)).attr('fill-opacity', op)
+          .on('pointermove', (ev) => tip.show(ev, [b + ' · ' + n, r.products + (r.products === 1 ? ' product' : ' products'), d3.format('.0%')(share) + ' of ' + b + "'s lineup"])).on('pointerleave', tip.hide);
+        if (hpx >= 11 && x.bandwidth() >= 30) {
+          const dark = ['--lt-cable', '--lt-chain', '--lt-folding'].includes(v) && !matchMedia('(prefers-color-scheme: dark)').matches;
+          g.append('text').attr('class', 'val').attr('x', x(b) + x.bandwidth() / 2).attr('y', (y(y0) + y(y1)) / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
+            .attr('fill-opacity', op).style('fill', dark ? '#FFFFFF' : '#13294B').style('font-weight', 600).style('font-size', hpx < 16 ? '10px' : null).text(d3.format('.0%')(share));
+        }
+        y0 = y1;
+      });
+      g.append('text').attr('class', 'val').attr('x', x(b) + x.bandwidth() / 2).attr('y', y(t) - 6).attr('text-anchor', 'middle').attr('fill-opacity', op).style('font-weight', 700).text(t);
+    });
+  });
+  dash.draw('s-pay2', (el) => {
+    el.replaceChildren();
+    const rows = dash.data('s_pay').data, W = el.clientWidth, H = 230, m = { t: 22, r: 8, b: 30, l: 40 };
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const x = d3.scaleBand(rows.map((r) => r.range), [m.l, W - m.r]).padding(0.3);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => r.count)], [H - m.b, m.t]).nice();
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r))).attr('font-size', null).attr('font-family', null);
+    svg.append('g').attr('class', 'ax').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickSize(0).tickPadding(8)).attr('font-size', null).attr('font-family', null);
+    svg.append('text').attr('transform', `translate(11,${(m.t + H - m.b) / 2}) rotate(-90)`).attr('text-anchor', 'middle').text('Number of students');
+    const tip = NB.tip(el), navy = col(el, '--nb-navy'), org = NB.color(el, 'Master Lock'), g = svg.append('g').attr('class', 'in');
+    g.selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.range)).attr('width', x.bandwidth()).attr('y', (r) => y(r.count)).attr('height', (r) => H - m.b - y(r.count)).attr('rx', 3)
+      .attr('fill', (r) => (r.range === '$15-$29' ? org : navy)).on('pointermove', (ev, r) => tip.show(ev, [r.range, r.count + ' students', d3.format('.0%')(r.share)])).on('pointerleave', tip.hide);
+    g.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (r) => x(r.range) + x.bandwidth() / 2).attr('y', (r) => y(r.count) - 6).attr('text-anchor', 'middle')
+      .text((r) => r.count + ' (' + d3.format('.0%')(r.share) + ')');
+  });
+})();
+</script>
+
+<p class="site-foot">Prepared by NOBE Illinois for Fortune Brands Innovations · Data: team competitor research and the NOBE student survey, Oct.–Nov. 2026</p>
 </main>
 </body>
 </html>
