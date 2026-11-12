@@ -65,11 +65,6 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
 .nb-svtable tbody th span { color: var(--color-fg-muted); font-size: 0.8125rem; }
 .nb-svtable td:last-child { width: 26%; color: var(--nb-navy); font-weight: 600; }
 .nb-mini { margin-top: 12px; }
-.nb-wide { margin-top: var(--cds-gap-md); }
-.nb-assort-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin-bottom: 4px; }
-.nb-seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px; background: var(--color-panel); }
-.nb-seg button { font: inherit; font-size: 12px; border: 0; background: none; color: var(--color-fg-muted); padding: 5px 12px; border-radius: 999px; cursor: pointer; }
-.nb-seg button[aria-pressed="true"] { background: var(--nb-navy); color: #fff; }
 .nb-mini table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
 .nb-mini th, .nb-mini td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
 .nb-mini th:first-child, .nb-mini td:first-child { text-align: left; }
@@ -230,19 +225,18 @@ strong.dash-skeleton { color: transparent; display: inline-block; min-width: 4ch
       <p>U-locks and U-lock + cable bundles. OnGuard sells the most U-locks and the priciest ones.</p>
       <div class="nb-chart tall dash-skeleton" data-draw="c-ulock" data-source="competitor_prices masterlock_prices cat_brand"></div>
     </section>
+    <section class="nb-card" id="assortment">
+      <h3>Product assortment by brand and lock type</h3>
+      <p>Share of each brand's bike locks by lock type. The number above each bar is the brand's total products.</p>
+      <div class="nb-legend" data-draw="c-assort-key"></div>
+      <div class="nb-chart tall" data-draw="c-assort"></div>
+    </section>
     <section class="nb-card" id="versus">
       <h3>Competitors vs. Master Lock, by lock type</h3>
       <p>Median price for each brand within each lock type, with Master Lock in orange. Comparing within a type keeps cheap cables from being set against premium U-locks.</p>
       <div class="nb-chart tall dash-skeleton" data-draw="c-vs" data-source="cat_brand"></div>
     </section>
   </div>
-  <section class="nb-card nb-wide" id="assortment">
-      <h3>Product assortment by brand and lock type</h3>
-      <p>Number of bike lock products in each brand's current U.S. lineup, split by lock type. Labels show each lock type's share of that brand's lineup. Switch to <b>Share of lineup</b> to stretch every brand to the same height and compare the mix.</p>
-      <div class="nb-assort-bar"><div class="nb-legend" data-draw="c-assort-key"></div><div class="nb-seg" role="group" aria-label="Chart scale"><button type="button" data-mode="count" aria-pressed="true">Number of products</button><button type="button" data-mode="share" aria-pressed="false">Share of lineup</button></div></div>
-      <div class="nb-chart tall" data-draw="c-assort"></div>
-      <div class="nb-tablewrap nb-mini" data-draw="c-assort-table"></div>
-    </section>
 
   <div class="nb-notes">
     <strong>About the data</strong>
@@ -792,59 +786,42 @@ dash.draw('c-vs', (el) => {
 
 <script>
 (() => {
-  const LT = [['Cable lock', '--lt-cable'], ['U-lock', '--lt-ulock'], ['U-lock + cable', '--lt-ucable'], ['Chain lock', '--lt-chain'], ['Folding lock', '--lt-folding'], ['Tie / zip lock', '--lt-tie']];
+  const LT = [['Cable lock', '--lt-cable', ['Cable lock']], ['U-lock', '--lt-ulock', ['U-lock', 'U-lock + cable']], ['Chain lock', '--lt-chain', ['Chain lock']], ['Folding lock', '--lt-folding', ['Folding lock']], ['Other', '--lt-tie', ['Tie / zip lock']]];
   const col = (el, v) => getComputedStyle(el).getPropertyValue(v).trim();
   dash.draw('c-assort-key', (el) => {
-    el.replaceChildren(...LT.map(([n, v]) => { const s = document.createElement('span'); const i = document.createElement('i'); i.style.background = col(el, v); s.append(i, n); return s; }));
+    el.replaceChildren(...LT.map(([n, v]) => { const s = document.createElement('span'); const i = document.createElement('i'); i.style.background = col(el, v); s.append(i, n === 'U-lock' ? 'U-lock (incl. with cable)' : n === 'Other' ? 'Other (zip / strap)' : n); return s; }));
   });
   dash.draw('c-assort', (el) => {
     el.replaceChildren();
     const rows = dash.data('assort').data, brands = [...new Set(rows.map((r) => r.brand))];
+    const cnt = (b, types) => d3.sum(rows.filter((r) => r.brand === b && types.includes(r.lock_type)), (r) => r.products);
     const tot = (b) => d3.sum(rows.filter((r) => r.brand === b), (r) => r.products);
-    const share = window.NBassortMode === 'share';
-    const W = el.clientWidth, narrow = W < 560, H = narrow ? 460 : 540, m = { t: 22, r: 8, b: narrow ? 70 : 40, l: 44 };
+    const W = el.clientWidth, narrow = W < 460, H = 360, m = { t: 24, r: 4, b: narrow ? 66 : 36, l: 40 };
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
-    const x = d3.scaleBand(brands, [m.l, W - m.r]).padding(0.32);
-    const y = share ? d3.scaleLinear([0, 1], [H - m.b, m.t]) : d3.scaleLinear([0, d3.max(brands, tot)], [H - m.b, m.t]).nice();
-    svg.append('g').attr('class', 'grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(share ? 5 : 9).tickFormat(share ? d3.format('.0%') : d3.format('d')).tickSize(-(W - m.l - m.r)))
+    const x = d3.scaleBand(brands, [m.l, W - m.r]).padding(0.25);
+    const y = d3.scaleLinear([0, 1], [H - m.b, m.t]);
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('.0%')).tickSize(-(W - m.l - m.r)))
       .attr('font-size', null).attr('font-family', null);
     svg.append('g').attr('class', 'ax').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickSize(0).tickPadding(8))
       .attr('font-size', null).attr('font-family', null).selectAll('text').attr('font-weight', (d) => (d === 'Master Lock' ? 700 : null))
       .attr('text-anchor', narrow ? 'end' : null).attr('transform', narrow ? 'rotate(-35)' : null).attr('dx', narrow ? '-0.3em' : null).attr('dy', narrow ? '0.4em' : null);
-    svg.append('text').attr('transform', `translate(12,${(m.t + H - m.b) / 2}) rotate(-90)`).attr('text-anchor', 'middle').text(share ? 'Share of lineup' : 'Unique products');
     const tip = NB.tip(el), g = svg.append('g').attr('class', 'in');
     brands.forEach((b) => {
       let y0 = 0; const t = tot(b), op = NB.op(b);
-      LT.forEach(([n, v]) => {
-        const r = rows.find((d) => d.brand === b && d.lock_type === n); if (!r || !r.products) return;
-        const pct = r.products / t, y1 = y0 + (share ? pct : r.products), hpx = y(y0) - y(y1);
+      LT.forEach(([n, v, types]) => {
+        const k = cnt(b, types); if (!k) return;
+        const p = k / t, y1 = y0 + p, hpx = y(y0) - y(y1);
         g.append('rect').attr('x', x(b)).attr('width', x.bandwidth()).attr('y', y(y1)).attr('height', Math.max(0, hpx - 1)).attr('fill', col(el, v)).attr('fill-opacity', op)
-          .on('pointermove', (ev) => tip.show(ev, [b + ' · ' + n, r.products + (r.products === 1 ? ' product' : ' products'), d3.format('.0%')(pct) + ' of ' + b + "'s lineup"])).on('pointerleave', tip.hide);
-        if (hpx >= 10 && x.bandwidth() >= 30) {
-          const dark = ['--lt-cable', '--lt-chain', '--lt-folding'].includes(v) && !matchMedia('(prefers-color-scheme: dark)').matches;
+          .on('pointermove', (ev) => tip.show(ev, [b + ' · ' + n, k + (k === 1 ? ' product' : ' products'), d3.format('.0%')(p) + ' of lineup'])).on('pointerleave', tip.hide);
+        if (hpx >= 16 && x.bandwidth() >= 34) {
+          const light = ['--lt-cable', '--lt-chain', '--lt-folding'].includes(v) && !matchMedia('(prefers-color-scheme: dark)').matches;
           g.append('text').attr('class', 'val').attr('x', x(b) + x.bandwidth() / 2).attr('y', (y(y0) + y(y1)) / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
-            .attr('fill-opacity', op).style('fill', dark ? '#FFFFFF' : '#13294B').style('font-weight', 600).style('font-size', hpx < 16 ? '10px' : null).text(d3.format('.0%')(pct) + (share && hpx >= 16 ? ' (' + r.products + ')' : ''));
+            .attr('fill-opacity', op).style('fill', light ? '#FFFFFF' : '#13294B').style('font-weight', 600).text(d3.format('.0%')(p));
         }
         y0 = y1;
       });
-      g.append('text').attr('class', 'val').attr('x', x(b) + x.bandwidth() / 2).attr('y', y(share ? 1 : t) - 6).attr('text-anchor', 'middle').attr('fill-opacity', op).style('font-weight', 700).text(share ? t + ' products' : t);
+      g.append('text').attr('class', 'val').attr('x', x(b) + x.bandwidth() / 2).attr('y', m.t - 8).attr('text-anchor', 'middle').attr('fill-opacity', op).style('font-weight', 700).text(t);
     });
-  });
-  document.querySelectorAll('.nb-seg button').forEach((bt) => bt.addEventListener('click', () => {
-    window.NBassortMode = bt.dataset.mode;
-    bt.parentElement.querySelectorAll('button').forEach((o) => o.setAttribute('aria-pressed', String(o === bt)));
-    window.NBredraw && window.NBredraw();
-  }));
-  dash.draw('c-assort-table', (el) => {
-    const rows = dash.data('assort').data, brands = [...new Set(rows.map((r) => r.brand))];
-    const short = { 'Cable lock': 'Cable', 'U-lock': 'U-lock', 'U-lock + cable': 'U + cable', 'Chain lock': 'Chain', 'Folding lock': 'Folding', 'Tie / zip lock': 'Tie / zip' };
-    const head = '<tr><th>Brand</th>' + LT.map(([n]) => '<th>' + short[n] + '</th>').join('') + '<th>Total</th></tr>';
-    const body = brands.map((b) => {
-      const br = rows.filter((r) => r.brand === b), t = d3.sum(br, (r) => r.products);
-      const cells = LT.map(([n]) => { const v = (br.find((r) => r.lock_type === n) || {}).products || 0; return '<td>' + (v ? v + ' <span>(' + d3.format('.0%')(v / t) + ')</span>' : '–') + '</td>'; }).join('');
-      return '<tr' + (b === 'Master Lock' ? ' class="ml"' : '') + '><td>' + b + '</td>' + cells + '<td>' + t + '</td></tr>';
-    }).join('');
-    el.innerHTML = '<table><thead>' + head + '</thead><tbody>' + body + '</tbody></table>';
   });
   dash.draw('s-pay2', (el) => {
     el.replaceChildren();
